@@ -7,7 +7,7 @@ export class BstNode {
 }
 
 
-export function makeBalancedBst(keys) {
+export function makeBalancedBst(...keys) {
     keys.sort();
     return makeBst(keys);
 }

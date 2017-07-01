@@ -5,14 +5,14 @@ import {makeBalancedBst, BstNode} from "../src/bst";
 describe("BstNode", () => {
     describe("construction", () => {
         it("with empty input", () => {
-            expectBalancedBst([]).toBeNull();
+            expectBalancedBst().toBeNull();
         });
 
         it("with single key", () => {
             const key = "a";
             const node = new BstNode(key, null, null);
 
-            expectBalancedBst([key]).toEqual(node);
+            expectBalancedBst(key).toEqual(node);
         });
 
         it("with two keys", () => {
@@ -21,7 +21,7 @@ describe("BstNode", () => {
             const leftNode = new BstNode(key1, null, null);
             const node = new BstNode(key2, leftNode, null);
 
-            expectBalancedBst([key1, key2]).toEqual(node);
+            expectBalancedBst(key1, key2).toEqual(node);
         });
 
         it("with three keys", () => {
@@ -32,7 +32,7 @@ describe("BstNode", () => {
             const rightNode = new BstNode(key3, null, null);
             const node = new BstNode(key2, leftNode, rightNode);
 
-            expectBalancedBst([key1, key2, key3]).toEqual(node);
+            expectBalancedBst(key1, key2, key3).toEqual(node);
         });
 
         it("with more than three keys", () => {
@@ -47,7 +47,7 @@ describe("BstNode", () => {
                 new BstNode(key5, new BstNode(key4, null, null), null);
             const node = new BstNode(key3, leftNode, rightNode);
 
-            expectBalancedBst([key1, key2, key3, key4, key5]).toEqual(node);
+            expectBalancedBst(key1, key2, key3, key4, key5).toEqual(node);
         });
 
         it("with unordered keys", () => {
@@ -58,7 +58,7 @@ describe("BstNode", () => {
             const rightNode = new BstNode(key3, null, null);
             const node = new BstNode(key2, leftNode, rightNode);
 
-            expectBalancedBst([key3, key1, key2]).toEqual(node);
+            expectBalancedBst(key3, key1, key2).toEqual(node);
         });
     });
 });
@@ -67,6 +67,6 @@ describe("BstNode", () => {
 // ===== Utilities
 
 
-function expectBalancedBst(keys) {
-    return expect(makeBalancedBst(keys));
+function expectBalancedBst(...keys) {
+    return expect(makeBalancedBst(...keys));
 }
