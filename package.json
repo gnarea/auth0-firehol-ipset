@@ -1,0 +1,20 @@
+{
+  "name": "auth0-firehol-ipset",
+  "version": "1.0.0",
+  "author": "Gustavo Narea",
+  "scripts": {
+    "lint": "eslint .",
+    "test": "babel-node spec/run.js",
+    "build": "babel --out-dir build/ src/"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.24.1",
+    "babel-plugin-transform-builtin-extend": "^1.1.2",
+    "babel-preset-env": "^1.5.2",
+    "eslint": "^3.19.0",
+    "eslint-plugin-import": "^2.3.0",
+    "eslint-plugin-node": "^5.0.0",
+    "eslint-plugin-promise": "^3.5.0",
+    "jasmine": "^2.6.0"
+  }
+}
