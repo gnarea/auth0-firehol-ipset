@@ -1,6 +1,6 @@
 /* eslint-env jasmine */
 
-import {makeBalancedBst} from "../src/bst";
+import {makeBalancedBst, binarySearch} from "../src/bst";
 
 describe("BstNode", () => {
     describe("construction", () => {
@@ -57,6 +57,41 @@ describe("BstNode", () => {
             const node = makeNode(key2, leftNode, rightNode);
 
             expectBalancedBst(key3, key1, key2).toEqual(node);
+        });
+    });
+
+    describe("search", () => {
+        it("with matching key at root", () => {
+            const key = "a";
+            const node = makeNode(key);
+
+            expect(binarySearch(key, node)).toBeTruthy();
+        });
+
+        it("with matching key in left node", () => {
+            const key1 = "a";
+            const key2 = "b";
+            const leftNode = makeNode(key1);
+            const node = makeNode(key2, leftNode);
+
+            expect(binarySearch(key1, node)).toBeTruthy();
+        });
+
+        it("with matching key in right node", () => {
+            const key1 = "a";
+            const key2 = "b";
+            const key3 = "c";
+            const leftNode = makeNode(key1);
+            const rightNode = makeNode(key3);
+            const node = makeNode(key2, leftNode, rightNode);
+
+            expect(binarySearch(key3, node)).toBeTruthy();
+        });
+
+        it("with unknown key", () => {
+            const node = makeNode("a");
+
+            expect(binarySearch("b", node)).toBeFalsy();
         });
     });
 });

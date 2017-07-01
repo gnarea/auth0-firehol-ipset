@@ -16,3 +16,18 @@ function makeBst(keys) {
     }
     return bst;
 }
+
+
+export function binarySearch(key, bst) {
+    let wasKeyFound;
+    if (!bst) {
+        wasKeyFound = false;
+    } else if (key === bst.value) {
+        wasKeyFound = true;
+    } else if (key < bst.value) {
+        wasKeyFound = binarySearch(key, bst.left);
+    } else {
+        wasKeyFound = binarySearch(key, bst.right);
+    }
+    return wasKeyFound;
+}
