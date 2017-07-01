@@ -1,6 +1,6 @@
 /* eslint-env jasmine */
 
-import {makeBalancedBst, BstNode} from "../src/bst";
+import {makeBalancedBst} from "../src/bst";
 
 describe("BstNode", () => {
     describe("construction", () => {
@@ -10,7 +10,7 @@ describe("BstNode", () => {
 
         it("with single key", () => {
             const key = "a";
-            const node = new BstNode(key, null, null);
+            const node = makeNode(key);
 
             expectBalancedBst(key).toEqual(node);
         });
@@ -18,8 +18,8 @@ describe("BstNode", () => {
         it("with two keys", () => {
             const key1 = "a";
             const key2 = "b";
-            const leftNode = new BstNode(key1, null, null);
-            const node = new BstNode(key2, leftNode, null);
+            const leftNode = makeNode(key1);
+            const node = makeNode(key2, leftNode);
 
             expectBalancedBst(key1, key2).toEqual(node);
         });
@@ -28,9 +28,9 @@ describe("BstNode", () => {
             const key1 = "a";
             const key2 = "b";
             const key3 = "c";
-            const leftNode = new BstNode(key1, null, null);
-            const rightNode = new BstNode(key3, null, null);
-            const node = new BstNode(key2, leftNode, rightNode);
+            const leftNode = makeNode(key1);
+            const rightNode = makeNode(key3);
+            const node = makeNode(key2, leftNode, rightNode);
 
             expectBalancedBst(key1, key2, key3).toEqual(node);
         });
@@ -41,11 +41,9 @@ describe("BstNode", () => {
             const key3 = "c";
             const key4 = "d";
             const key5 = "e";
-            const leftNode =
-                new BstNode(key2, new BstNode(key1, null, null), null);
-            const rightNode =
-                new BstNode(key5, new BstNode(key4, null, null), null);
-            const node = new BstNode(key3, leftNode, rightNode);
+            const leftNode = makeNode(key2, makeNode(key1));
+            const rightNode = makeNode(key5, makeNode(key4));
+            const node = makeNode(key3, leftNode, rightNode);
 
             expectBalancedBst(key1, key2, key3, key4, key5).toEqual(node);
         });
@@ -54,9 +52,9 @@ describe("BstNode", () => {
             const key1 = "a";
             const key2 = "b";
             const key3 = "c";
-            const leftNode = new BstNode(key1, null, null);
-            const rightNode = new BstNode(key3, null, null);
-            const node = new BstNode(key2, leftNode, rightNode);
+            const leftNode = makeNode(key1);
+            const rightNode = makeNode(key3);
+            const node = makeNode(key2, leftNode, rightNode);
 
             expectBalancedBst(key3, key1, key2).toEqual(node);
         });
@@ -69,4 +67,9 @@ describe("BstNode", () => {
 
 function expectBalancedBst(...keys) {
     return expect(makeBalancedBst(...keys));
+}
+
+
+function makeNode(value, leftNode=null, rightNode=null) {
+    return {value: value, left: leftNode, right: rightNode};
 }
