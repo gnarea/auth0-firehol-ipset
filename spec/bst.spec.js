@@ -105,6 +105,6 @@ function expectBalancedBst(...keys) {
 }
 
 
-function makeNode(value, leftNode=null, rightNode=null) {
-    return {value: value, left: leftNode, right: rightNode};
+function makeNode(key, leftNode=null, rightNode=null) {
+    return {key: key, left: leftNode, right: rightNode};
 }

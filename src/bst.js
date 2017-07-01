@@ -10,7 +10,7 @@ function makeBst(keys) {
         const medianIndex = Math.floor(keys.length / 2);
         const leftNode = makeBst(keys.slice(0, medianIndex));
         const rightNode = makeBst(keys.slice(medianIndex + 1));
-        bst = {value: keys[medianIndex], left: leftNode, right: rightNode};
+        bst = {key: keys[medianIndex], left: leftNode, right: rightNode};
     } else {
         bst = null;
     }
@@ -22,9 +22,9 @@ export function binarySearch(key, bst) {
     let wasKeyFound;
     if (!bst) {
         wasKeyFound = false;
-    } else if (key === bst.value) {
+    } else if (key === bst.key) {
         wasKeyFound = true;
-    } else if (key < bst.value) {
+    } else if (key < bst.key) {
         wasKeyFound = binarySearch(key, bst.left);
     } else {
         wasKeyFound = binarySearch(key, bst.right);
