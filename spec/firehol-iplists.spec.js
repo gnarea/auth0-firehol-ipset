@@ -1,8 +1,15 @@
 /* eslint-env jasmine */
 
 import BluebirdPromise from "bluebird";
+import CIDR from "ip-cidr";
 import {Address4} from "ip-address";
-import {fetchIplistFromUrl, mergeIplistsFromUrls} from "../src/firehol-iplists";
+import {binarySearch} from "../src/bst";
+import {
+    buildBstFromIplist,
+    fetchIplistFromUrl,
+    findIpAddressInBst,
+    mergeIplistsFromUrls
+} from "../src/firehol-iplists";
 
 const STUB_IPLIST_URL =
     "https://raw.githubusercontent.com/firehol/blocklist-ipsets/master/firehol_webserver.netset";
@@ -10,6 +17,9 @@ const STUB_IPLIST_URL =
 const STUB_IP_ADDRESS_1 = "192.0.2.1";
 const STUB_IP_ADDRESS_2 = "192.0.2.2";
 const STUB_IP_ADDRESSES = [STUB_IP_ADDRESS_1, STUB_IP_ADDRESS_2];
+
+const STUB_IPV6_CORRECT_ADDRESS = "2001:db8::";
+const STUB_IPV6_CANONICAL_ADDRESS = "2001:0db8:0000:0000:0000:0000:0000:0000";
 
 
 describe("fetchIplistFromUrl", () => {
@@ -95,6 +105,71 @@ describe("mergeIplistsFromUrls", () => {
         testIpsetMerger(iplistByUrl, done, (iplist) => {
             expect(iplist).toEqual(STUB_IP_ADDRESSES);
         });
+    });
+});
+
+
+describe("buildBstFromIplist", () => {
+    it("with IPv4 address", () => {
+        const bst = buildBstFromIplist([STUB_IP_ADDRESS_1]);
+        expect(binarySearch(STUB_IP_ADDRESS_1, bst)).toBeTruthy();
+    });
+
+    it("with IPv4 CIDR block", () => {
+        const cidrBlock = new CIDR("192.0.2.0/24");
+        const bst = buildBstFromIplist([cidrBlock.toString()]);
+        expect(binarySearch(cidrBlock.start(), bst)).toBeTruthy();
+        expect(binarySearch(cidrBlock.toString(), bst)).toBeFalsy();
+    });
+
+    it("with 'correct' IPv6 address", () => {
+        const bst = buildBstFromIplist([STUB_IPV6_CORRECT_ADDRESS]);
+        expect(binarySearch(STUB_IPV6_CORRECT_ADDRESS, bst)).toBeTruthy();
+    });
+
+    it("with 'correct' IPv6 CIDR block", () => {
+        const correctIpv6CidrBlock =`${STUB_IPV6_CORRECT_ADDRESS}/126`;
+        const bst = buildBstFromIplist([correctIpv6CidrBlock]);
+        expect(binarySearch(STUB_IPV6_CORRECT_ADDRESS, bst)).toBeTruthy();
+        expect(binarySearch(correctIpv6CidrBlock, bst)).toBeFalsy();
+    });
+
+    it("with non 'correct' IPv6 address", () => {
+        const bst = buildBstFromIplist([STUB_IPV6_CANONICAL_ADDRESS]);
+        expect(binarySearch(STUB_IPV6_CORRECT_ADDRESS, bst)).toBeTruthy();
+        expect(binarySearch(STUB_IPV6_CANONICAL_ADDRESS, bst)).toBeFalsy();
+    });
+
+    it("with non 'correct' IPv6 CIDR block", () => {
+        const canonicalIpv6CidrBlock = `${STUB_IPV6_CANONICAL_ADDRESS}/126`;
+        const bst = buildBstFromIplist([canonicalIpv6CidrBlock]);
+        expect(binarySearch(STUB_IPV6_CORRECT_ADDRESS, bst)).toBeTruthy();
+        expect(binarySearch(canonicalIpv6CidrBlock, bst)).toBeFalsy();
+    });
+
+    it("with multiple IP addresses", () => {
+        const bst =
+            buildBstFromIplist([STUB_IP_ADDRESS_1, STUB_IPV6_CORRECT_ADDRESS]);
+        expect(binarySearch(STUB_IP_ADDRESS_1, bst)).toBeTruthy();
+        expect(binarySearch(STUB_IPV6_CORRECT_ADDRESS, bst)).toBeTruthy();
+    });
+});
+
+
+describe("findIpAddressInBst", () => {
+    it("with absent IP Address", () => {
+        const bst = buildBstFromIplist([STUB_IP_ADDRESS_1]);
+        expect(findIpAddressInBst(STUB_IP_ADDRESS_2, bst)).toBeFalsy();
+    });
+
+    it("with present, 'correct' IP Address", () => {
+        const bst = buildBstFromIplist([STUB_IP_ADDRESS_1]);
+        expect(findIpAddressInBst(STUB_IP_ADDRESS_1, bst)).toBeTruthy();
+    });
+
+    it("with present, non 'correct' IP Address", () => {
+        const bst = buildBstFromIplist([STUB_IPV6_CORRECT_ADDRESS]);
+        expect(findIpAddressInBst(STUB_IPV6_CANONICAL_ADDRESS, bst)).toBeTruthy();
     });
 });
 

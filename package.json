@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "ip-address": "^5.8.8",
+    "ip-cidr": "^1.0.4",
     "request": "^2.81.0",
     "request-promise": "^4.2.1"
   }

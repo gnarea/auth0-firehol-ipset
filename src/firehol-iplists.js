@@ -1,5 +1,11 @@
 import BluebirdPromise from "bluebird";
+import {Address6} from "ip-address";
+import CIDR from "ip-cidr";
 import requestPromise from "request-promise";
+import {binarySearch, makeBalancedBst} from "../src/bst";
+
+
+// ===== IP List Fetching
 
 
 export function fetchIplistFromUrl(url, downloader=requestPromise) {
@@ -29,4 +35,43 @@ export function mergeIplistsFromUrls(urls, downloader=fetchIplistFromUrl) {
 
 function extendIplistFromUrl(iplist, url, downloader) {
     return downloader(url).then((urlIplist) => iplist.concat(urlIplist));
+}
+
+
+// ===== IP Address Lookup
+
+
+export function buildBstFromIplist(iplist) {
+    const iplistDenormalised = iplist.reduce(denormaliseIpAddress, []);
+    return makeBalancedBst(...iplistDenormalised);
+}
+
+
+function denormaliseIpAddress(iplist, ipAddress) {
+    let denormalisedAddresses;
+    if (ipAddress.includes("/")) {
+        const cidrBlock = new CIDR(ipAddress);
+        denormalisedAddresses = cidrBlock.toArray().map(makeIpAddressCorrect);
+    } else {
+        denormalisedAddresses = [makeIpAddressCorrect(ipAddress)];
+    }
+    return iplist.concat(denormalisedAddresses);
+}
+
+
+export function findIpAddressInBst(ipAddress, iplistBst) {
+    const correctIpAddress = makeIpAddressCorrect(ipAddress);
+    return binarySearch(correctIpAddress, iplistBst);
+}
+
+
+function makeIpAddressCorrect(ipAddress) {
+    let correctIpAddress;
+    if (ipAddress.includes(":")) {
+        const ipv6Address = new Address6(ipAddress);
+        correctIpAddress = ipv6Address.correctForm();
+    } else {
+        correctIpAddress = ipAddress;
+    }
+    return correctIpAddress;
 }
