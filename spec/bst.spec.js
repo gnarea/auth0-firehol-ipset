@@ -101,10 +101,10 @@ describe("BstNode", () => {
 
 
 function expectBalancedBst(...keys) {
-    return expect(makeBalancedBst(...keys));
+    return expect(makeBalancedBst(keys));
 }
 
 
 function makeNode(key, leftNode=null, rightNode=null) {
-    return {key: key, left: leftNode, right: rightNode};
+    return {k: key, l: leftNode, r: rightNode};
 }

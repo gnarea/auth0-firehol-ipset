@@ -2,7 +2,7 @@ import BluebirdPromise from "bluebird";
 import {Address6} from "ip-address";
 import CIDR from "ip-cidr";
 import requestPromise from "request-promise";
-import {binarySearch, makeBalancedBst} from "../src/bst";
+import {binarySearch, makeBalancedBst} from "./bst";
 
 
 // ===== IP List Fetching
@@ -42,20 +42,25 @@ function extendIplistFromUrl(iplist, url, downloader) {
 
 
 export function buildBstFromIplist(iplist) {
-    const iplistDenormalised = iplist.reduce(denormaliseIpAddress, []);
-    return makeBalancedBst(...iplistDenormalised);
+    let iplistDenormalised = [];
+    for (const ipaddress of iplist) {
+        for (const denormalisedIpaddress of denormaliseIpAddress(ipaddress)) {
+            iplistDenormalised.push(makeIpAddressCorrect(denormalisedIpaddress));
+        }
+    }
+    return makeBalancedBst(iplistDenormalised);
 }
 
 
-function denormaliseIpAddress(iplist, ipAddress) {
+function denormaliseIpAddress(ipAddress) {
     let denormalisedAddresses;
     if (ipAddress.includes("/")) {
         const cidrBlock = new CIDR(ipAddress);
-        denormalisedAddresses = cidrBlock.toArray().map(makeIpAddressCorrect);
+        denormalisedAddresses = cidrBlock.toArray();
     } else {
-        denormalisedAddresses = [makeIpAddressCorrect(ipAddress)];
+        denormalisedAddresses = [ipAddress];
     }
-    return iplist.concat(denormalisedAddresses);
+    return denormalisedAddresses;
 }
 
 
