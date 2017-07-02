@@ -16,5 +16,10 @@
     "eslint-plugin-node": "^5.0.0",
     "eslint-plugin-promise": "^3.5.0",
     "jasmine": "^2.6.0"
+  },
+  "dependencies": {
+    "ip-address": "^5.8.8",
+    "request": "^2.81.0",
+    "request-promise": "^4.2.1"
   }
 }
