@@ -19,7 +19,7 @@ the following environment variables:
 - `AUTH0_IPSET_OBJECT_KEY` (default: `bst.json`).
 
 The supported IP lists are available as constants in
-[auth0-ipset-conf.js](src/auth0-ipset-conf.js).
+[auth0-ipset-updater.js](src/auth0-ipset-updater.js).
 
 ## IP Lookup Service
 
