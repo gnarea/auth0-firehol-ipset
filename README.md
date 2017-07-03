@@ -10,10 +10,13 @@ the AWS CLI, for example, then that'd be the case.
 
 ## Dataset synchronisation
 
-Run `npm run ipset-update`. This command is likely to take minutes.
+Run `npm run ipset-update`.
 
 It will push the serialised BST to Amazon S3. To customise the target, set
 the following environment variables:
 
 - `AUTH0_IPSET_BUCKET` (default: `auth0-firehol-ipset`).
 - `AUTH0_IPSET_OBJECT_KEY` (default: `bst.json`).
+
+The supported IP lists are available as constants in
+[auth0-ipset-service.js](src/auth0-ipset-service.js).

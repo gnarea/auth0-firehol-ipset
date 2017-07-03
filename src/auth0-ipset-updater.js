@@ -5,9 +5,9 @@ import {AUTH0_IPSET_BUCKET, AUTH0_IPSET_OBJECT_KEY} from "./auth0-ipset-conf";
 
 
 const IPLIST_URLS = [
-    "https://raw.githubusercontent.com/firehol/blocklist-ipsets/master/firehol_abusers_30d.netset",
-    "https://raw.githubusercontent.com/firehol/blocklist-ipsets/master/spamhaus_edrop.netset",
-    "https://raw.githubusercontent.com/firehol/blocklist-ipsets/master/firehol_level3.netset",
+    "https://raw.githubusercontent.com/firehol/blocklist-ipsets/master/firehol_anonymous.netset",
+    "https://raw.githubusercontent.com/firehol/blocklist-ipsets/master/firehol_abusers_1d.netset",
+    "https://raw.githubusercontent.com/firehol/blocklist-ipsets/master/firehol_level2.netset",
 ];
 
 
