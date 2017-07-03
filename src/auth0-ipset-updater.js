@@ -1,7 +1,7 @@
 import BluebirdPromise from "bluebird";
 import S3 from "aws-sdk/clients/s3";
 import {buildBstFromIplist, mergeIplistsFromUrls} from "./firehol-iplists";
-import {AUTH0_IPSET_BUCKET, AUTH0_IPSET_OBJECT_KEY} from "./auth0-ipset-conf";
+import {AUTH0_IPSET_OBJECT_PARAMS} from "./auth0-ipset-conf";
 
 
 const IPLIST_URLS = [
@@ -25,11 +25,9 @@ function saveStringToS3(string) {
     const s3 = new S3();
     const s3PutObjectPromisified =
         BluebirdPromise.promisify(s3.putObject, {context: s3});
-    return s3PutObjectPromisified({
-        Bucket: AUTH0_IPSET_BUCKET,
-        Key: AUTH0_IPSET_OBJECT_KEY,
-        Body: string
-    });
+    const objectParams =
+        Object.assign({}, AUTH0_IPSET_OBJECT_PARAMS, {Body: string});
+    return s3PutObjectPromisified(objectParams);
 }
 
 

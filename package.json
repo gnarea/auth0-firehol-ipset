@@ -5,7 +5,8 @@
   "scripts": {
     "lint": "eslint --ignore-path .gitignore .",
     "test": "babel-node spec/run.js",
-    "ipset-update": "babel-node src/auth0-ipset-updater.js"
+    "ipset-update": "babel-node src/auth0-ipset-updater.js",
+    "ipset-serve": "babel-node src/auth0-ipset-service.js"
   },
   "devDependencies": {
     "babel-cli": "^6.24.1",
@@ -19,6 +20,7 @@
   },
   "dependencies": {
     "aws-sdk": "^2.80.0",
+    "express": "^4.15.3",
     "ip-address": "^5.8.8",
     "ip-cidr": "^1.0.4",
     "request": "^2.81.0",

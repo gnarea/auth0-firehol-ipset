@@ -20,3 +20,20 @@ the following environment variables:
 
 The supported IP lists are available as constants in
 [auth0-ipset-service.js](src/auth0-ipset-service.js).
+
+## IP Lookup Service
+
+To start the web application server, run `npm run ipset-serve`. The server
+will report when it's ready to start accepting connections -- That is, once
+the dataset has been retrieved from Amazon S3. 
+
+To look up an IP address, you should make a request to the root of the
+application with the IP address included in the query string; e.g.:
+
+```bash
+curl -v 'http://localhost:8080/?ip=37.9.53.1'
+```
+
+The service shall respond with 204 "No Content" if the IP address was found
+in the dataset, or 404 "Not Found" otherwise. Additionally, a 400 "Bad Request"
+is returned if no IP address is passed.
